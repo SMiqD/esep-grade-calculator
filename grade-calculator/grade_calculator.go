@@ -1,9 +1,7 @@
 package esepunittests
 
 type GradeCalculator struct {
-	assignments []Grade
-	exams       []Grade
-	essays      []Grade
+	grades []Grade
 }
 
 type GradeType int
@@ -31,11 +29,7 @@ type Grade struct {
 }
 
 func NewGradeCalculator() *GradeCalculator {
-	return &GradeCalculator{
-		assignments: make([]Grade, 0),
-		exams:       make([]Grade, 0),
-		essays:      make([]Grade, 0),
-	}
+	return &GradeCalculator{grades: make([]Grade, 0)}
 }
 
 func (gc *GradeCalculator) GetFinalGrade() string {
@@ -56,31 +50,26 @@ func (gc *GradeCalculator) GetFinalGrade() string {
 
 func (gc *GradeCalculator) AddGrade(name string, grade int, gradeType GradeType) {
 	switch gradeType {
-	case Assignment:
-		gc.assignments = append(gc.assignments, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Assignment,
-		})
-	case Exam:
-		gc.exams = append(gc.exams, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Exam,
-		})
-	case Essay:
-		gc.essays = append(gc.essays, Grade{
-			Name:  name,
-			Grade: grade,
-			Type:  Essay,
-		})
+	case Assignment, Exam, Essay:
+		gc.grades = append(gc.grades, Grade{Name: name, Grade: grade, Type: gradeType})
 	}
 }
 
+// Only one list is stored; filtered slices are temporary calculation inputs.
+func (gc *GradeCalculator) gradesOfType(gradeType GradeType) []Grade {
+	var selected []Grade
+	for _, grade := range gc.grades {
+		if grade.Type == gradeType {
+			selected = append(selected, grade)
+		}
+	}
+	return selected
+}
+
 func (gc *GradeCalculator) calculateNumericalGrade() float64 {
-	assignment_average := computeAverage(gc.assignments)
-	exam_average := computeAverage(gc.exams)
-	essay_average := computeAverage(gc.essays)
+	assignment_average := computeAverage(gc.gradesOfType(Assignment))
+	exam_average := computeAverage(gc.gradesOfType(Exam))
+	essay_average := computeAverage(gc.gradesOfType(Essay))
 
 	weighted_grade := float64(assignment_average)*.5 + float64(exam_average)*.35 + float64(essay_average)*.15
 

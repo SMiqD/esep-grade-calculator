@@ -46,14 +46,6 @@ suitable for `go get`.
 
 ## Grading requirements
 
-Average scores in each category, then apply these weights:
-
-| Category | Weight |
-| --- | --- |
-| Assignments | 50% |
-| Exams | 35% |
-| Essays | 15% |
-
 Use A for scores >= 90, B for >= 80, C for >= 70, D for >= 60, and F otherwise.
 Passing means C or better. Keep fractional averages until the final comparison;
 do not round up across a letter boundary.
@@ -84,15 +76,10 @@ test supplies scores that should produce A and can pass for the wrong reason.
 Part 3 corrects the existing tests and code; Part 4 adds tests. See commit
 history for the separate assignment snapshots.
 
-## References
-
-- https://go.dev/doc/tutorial/add-a-test
-- https://go.dev/blog/cover
-- https://go.dev/ref/spec#For_statements
 
 ## Completed assignment policies and Pass/Fail mode
 
-Empty categories contribute zero and their weights are not redistributed.
+Empty categories contribute zero and their weights are therefore not redistributed.
 Unknown grade types are ignored, preserving the starter behavior. Scores are
 expected to be integers in 0..100; validation and configurable weights remain
 outside this exercise's requirements.
@@ -107,21 +94,12 @@ gc.AddGrade("essay", 70, calculator.Essay)
 result := gc.GetFinalGrade() // "Pass"
 ```
 
-`NewGradeCalculator(calculator.LetterGrades)` explicitly selects letter grades.
-The optional constructor mode uses the first supplied value; values other than
+`NewGradeCalculator(calculator.LetterGrades)` makes sures it selects letter grades.
+The optional constructor mode uses the first supplied value, the values other than
 `PassFail` use letter evaluation. `AddGrade` and `GetFinalGrade` retain their
 original signatures. Pass means a weighted score >= 70; lower scores return
 "Fail". Fractional scores are not rounded up.
 
-The calculator stores one persistent list of grades. Temporary category slices
-are used when computing averages. Existing tests were unchanged for Part 6.
 
-Assignment checkpoints:
-- Part 3: corrected the three original tests/code; statement coverage 85.2%.
-- Part 4: added tests; statement coverage 100.0%.
-- Part 5: in a temporary copy, commented out failure assertions; coverage stayed
-  100.0%. Assertions remain enabled in this repository.
-- Part 6: changed internal storage only; unchanged tests and coverage 100.0%.
-- Part 7.1: added new tests before implementation (intentional red snapshot).
-- Part 7.2: added constructor/state; new behavioral tests still failed.
-- Part 7.3: implemented Pass/Fail; all tests pass, coverage 100.0%.
+
+

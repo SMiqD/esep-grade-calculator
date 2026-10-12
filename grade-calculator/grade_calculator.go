@@ -2,7 +2,16 @@ package esepunittests
 
 type GradeCalculator struct {
 	grades []Grade
+	mode   EvaluationMode
 }
+
+// EvaluationMode chooses the representation returned by GetFinalGrade.
+type EvaluationMode int
+
+const (
+	LetterGrades EvaluationMode = iota
+	PassFail
+)
 
 type GradeType int
 
@@ -28,8 +37,14 @@ type Grade struct {
 	Type  GradeType
 }
 
-func NewGradeCalculator() *GradeCalculator {
-	return &GradeCalculator{grades: make([]Grade, 0)}
+// With no argument, retain the original letter-grade behavior. Only the first
+// optional mode is used; modes other than PassFail use letter evaluation.
+func NewGradeCalculator(modes ...EvaluationMode) *GradeCalculator {
+	mode := LetterGrades
+	if len(modes) > 0 {
+		mode = modes[0]
+	}
+	return &GradeCalculator{grades: make([]Grade, 0), mode: mode}
 }
 
 func (gc *GradeCalculator) GetFinalGrade() string {
